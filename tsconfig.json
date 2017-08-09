@@ -3,7 +3,12 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": false,
-    "watch":true
+    "watch":true,
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true
   },
   "exclude": [
     "node_modules"

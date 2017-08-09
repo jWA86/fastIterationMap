@@ -4,3 +4,5 @@ todo.txt
 .nyc_output/
 coverage
 package-lock.json
+browser/
+test/lib/
