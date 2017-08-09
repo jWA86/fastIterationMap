@@ -48,10 +48,6 @@ var FastIteMap = (function (_super) {
             }
         };
         _this.forEach = function (callBack) {
-            var l = this.length;
-            for (var i = 0; i < l; ++i) {
-                callBack(this[i]);
-            }
         };
         _this.get = function (key) {
             return this[this._keys.get(key)];
@@ -105,8 +101,14 @@ var FastIteMap = (function (_super) {
             }
             arguments[0] = value;
             arguments.length = 1;
-            var l = Array.prototype.push.apply(this, arguments);
-            this._keys.set(key, l - 1);
+            var e = this._keys.get(key);
+            if (e === undefined) {
+                var l = Array.prototype.push.apply(this, arguments);
+                this._keys.set(key, l - 1);
+            }
+            else {
+                this[e] = value;
+            }
             return this.length;
         };
         _this.set = function (key, value) {

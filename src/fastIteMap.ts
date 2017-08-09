@@ -64,10 +64,10 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
         }
     }
     forEach = function (callBack: Function) {
-        let l = this.length;
-        for (let i = 0; i < l; ++i) {
-            callBack(this[i]);
-        }
+        // let l = this.length;
+        // for (let i = 0; i < l; ++i) {
+        //     callBack(this[i]);
+        // }
     }
     get = function (key: K): V {
         return this[this._keys.get(key)];
@@ -118,8 +118,15 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
         if (value === undefined) { return; }
         arguments[0] = value;
         arguments.length = 1;
-        let l = Array.prototype.push.apply(this, arguments);
-        this._keys.set(key, l - 1);
+        let e = this._keys.get(key)
+        //if the key doesn't exist add the element
+        if(e===undefined){
+            let l = Array.prototype.push.apply(this, arguments);
+            this._keys.set(key, l - 1);
+        }else{
+            //if the key is already there, update the value
+            this[e] = value;
+        }
         return this.length;
     }
     set = function (key: K, value: V): number {

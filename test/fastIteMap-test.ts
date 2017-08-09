@@ -47,10 +47,15 @@ describe("Custom HashMap", () => {
             expect(m[0]).to.equal(0);
             expect(m[1]).to.equal(k);
         });
-        it("size should return the number of element in the hashMap", () => {
-            expect(myMap.length).to.equal(0);
+        it("set with a prexisting key should update the element instead of adding one", () => {
             myMap.set(k, v);
             expect(myMap.length).to.equal(1);
+            expect(myMap.keys().size).to.equal(1);
+            expect(myMap.get(k)).to.equal(v);
+            myMap.set(k, v2);
+            expect(myMap.length).to.equal(1);
+            expect(myMap.keys().size).to.equal(1);
+            expect(myMap.get(k)).to.equal(v2);
         });
     });
     describe("push(key, value) same behavior as set(k,v)", () => {
@@ -77,6 +82,16 @@ describe("Custom HashMap", () => {
             expect(myMap.length).to.equal(0);
             myMap.set(k, v);
             expect(myMap.length).to.equal(1);
+        });
+         it("push with a prexisting key should update the element instead of adding one", () => {
+            myMap.push(k, v);
+            expect(myMap.length).to.equal(1);
+            expect(myMap.keys().size).to.equal(1);
+            expect(myMap.get(k)).to.equal(v);
+            myMap.push(k, v2);
+            expect(myMap.length).to.equal(1);
+            expect(myMap.keys().size).to.equal(1);
+            expect(myMap.get(k)).to.equal(v2);
         });
     });
     describe("get(key)", () => {
