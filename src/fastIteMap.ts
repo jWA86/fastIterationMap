@@ -1,61 +1,40 @@
+export { FastIteMap, IFastIteMap }
 interface IFastIteMap<K, V> {
     clear();
     delete(key: K): boolean;
-    forEach(callBack: Function);
     get(key: K): V
     has(key: K): boolean;
     //insert based on key
     insertAfter(key: K, value: V, keyRef: K): boolean;
     insertBefore(key: K, value: V, keyRef: K): boolean;
     //provide for reading keys only, should not be modified outside the class
-    keys(): Map<K, number>
+    keys: Map<K, number>
+    values: V[];
     length: number;
-    //overwrite array's push to avoid unwanted behavior 
+    size: number;
     push(key: K, value: V);
     set(key: K, value: V);
-    //overwrite sort so it sort the values array and the keys/index collection
-    sort(): Array<V>;
-    //other Array method should be overwritten or deleted
+
 }
 
-//trick to extends Array in typescript based on http://jqfaq.com/how-to-extend-native-javascipt-object-in-typescript/
-class XArray<V> {
-    constructor() {
-        Array.apply(this, arguments);
-        return new Array();
-    }
-    pop(): any { return "" };
-    push(val): number { return 0; };
-    length: number;
-}
-//Adding Arrray to XArray prototype chain.
-XArray["prototype"] = new Array();
-
-class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
-    //_keys store the index of the element which is stored in the _values array
-    //keys are not in the same order as values, therefore it shouldn't be iterate
+class FastIteMap<K, V> implements IFastIteMap<K, V> {
+    //_keys store the index of the element which is stored in the this array
+    // keys are not in the same order as values, therefore it shouldn't be iterate
     protected _keys: Map<K, number>;
-    // protected _values: V[];
+    protected _values: V[];
     constructor() {
-        super();
         this._keys = new Map<K, number>();
+        this._values = [];
     }
-    test = function () {
-        console.log("t");
-    }
-    clear = function () {
+    clear() {
         this._keys.clear();
-        while (this.length > 0) {
-            this.pop();
-        }
+        this._values = [];
     }
-
-    delete = function (key: K) {
-
+    delete(key: K) {
         let i = this._keys.get(key);
         let r = this._keys.delete(key);
         this.offsetIndexInKeys(i, -1);
-        let r2 = this.splice(i, 1);
+        let r2 = this._values.splice(i, 1);
         if (r2.length > 0 && r) {
             return true;
         }
@@ -63,23 +42,16 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
             return false;
         }
     }
-    forEach = function (callBack: Function) {
-        // let l = this.length;
-        // for (let i = 0; i < l; ++i) {
-        //     callBack(this[i]);
-        // }
+    get(key: K): V {
+        return this._values[this._keys.get(key)];
     }
-    get = function (key: K): V {
-        return this[this._keys.get(key)];
-    }
-    has = function (key: K): boolean {
+    has(key: K): boolean {
         return this._keys.has(key);
     }
-    protected insertValue = function (key: K, value: V, index: number) {
-        return this.splice(index, 0, value);
+    protected insertValue(key: K, value: V, index: number): V[] {
+        return this._values.splice(index, 0, value);
     }
-    protected offsetIndexInKeys = function (after: number, offsetVal: number) {
-
+    protected offsetIndexInKeys(after: number, offsetVal: number): void {
         var mapIter = this._keys.entries();
         let l = this._keys.size;
         for (let i = 0; i < l; ++i) {
@@ -89,7 +61,7 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
             }
         }
     }
-    insertAfter = function (key: K, value: V, keyRef: K): boolean {
+    insertAfter(key: K, value: V, keyRef: K): boolean {
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i + 1);
         if (i === undefined) {
@@ -100,7 +72,7 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
             return true;
         }
     }
-    insertBefore = function (key: K, value: V, keyRef: K): boolean {
+    insertBefore(key: K, value: V, keyRef: K): boolean {
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i);
         if (i === undefined) {
@@ -111,32 +83,34 @@ class FastIteMap<K, V> extends Array implements IFastIteMap<K, V>{
             return true;
         }
     }
-    keys = function () {
+    get length(): number {
+        return this._values.length;
+    }
+    get keys(): Map<K, number> {
         return this._keys;
     }
-    push = function (key: K, value: V): number {
-        if (value === undefined) { return; }
-        arguments[0] = value;
-        arguments.length = 1;
+    push(key: K, value: V): number {
         let e = this._keys.get(key)
         //if the key doesn't exist add the element
-        if(e===undefined){
-            let l = Array.prototype.push.apply(this, arguments);
+        if (e === undefined) {
+            let l = this._values.push(value);
             this._keys.set(key, l - 1);
-        }else{
+        } else {
             //if the key is already there, update the value
-            this[e] = value;
+            this._values[e] = value;
         }
-        return this.length;
+        return this._values.length;
     }
-    set = function (key: K, value: V): number {
-        this.push(key, value);
-        return this.length;
+    set(key: K, value: V): number {
+        return this.push(key, value);
     }
-    sort(): Array<V> {
-
+    sort(compare?){
+        this.values.sort(compare);
+    }
+    get size(): number {
+        return this._values.length;
+    }
+    get values(): V[] {
+        return this._values;
     }
 }
-
-
-export { FastIteMap, IFastIteMap }
