@@ -1,36 +1,34 @@
-export { FastIteMap, IFastIteMap }
-interface IFastIteMap<K, V> {
+export { FastIterationMap, IFastIterationMap }
+interface IFastIterationMap<K, V> {
     clear();
     delete(key: K): boolean;
     get(key: K): V
     has(key: K): boolean;
-    //insert based on key
     insertAfter(key: K, value: V, keyRef: K): boolean;
     insertBefore(key: K, value: V, keyRef: K): boolean;
     //provide for reading keys only, should not be modified outside the class
     keys: Map<K, number>
-    values: V[];
     length: number;
-    size: number;
     push(key: K, value: V);
     set(key: K, value: V);
-
+    size: number;
+    values: V[];
 }
 
-class FastIteMap<K, V> implements IFastIteMap<K, V> {
-    //_keys store the index of the element which is stored in the this array
-    // keys are not in the same order as values, therefore it shouldn't be iterate
+class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
+    // _keys store the index of the element which is stored in the _values array
+    // keys are not in the same order as values, therefore it shouldn't be use outside the class
     protected _keys: Map<K, number>;
     protected _values: V[];
     constructor() {
         this._keys = new Map<K, number>();
         this._values = [];
     }
-    clear() {
+    clear():void {
         this._keys.clear();
         this._values = [];
     }
-    delete(key: K) {
+    delete(key: K):boolean {
         let i = this._keys.get(key);
         let r = this._keys.delete(key);
         this.offsetIndexInKeys(i, -1);
@@ -62,6 +60,7 @@ class FastIteMap<K, V> implements IFastIteMap<K, V> {
         }
     }
     insertAfter(key: K, value: V, keyRef: K): boolean {
+        if(this._keys.get(key)!==undefined){return false;}
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i + 1);
         if (i === undefined) {
@@ -73,6 +72,7 @@ class FastIteMap<K, V> implements IFastIteMap<K, V> {
         }
     }
     insertBefore(key: K, value: V, keyRef: K): boolean {
+        if(this._keys.get(key)!==undefined){return false;}
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i);
         if (i === undefined) {
@@ -83,11 +83,11 @@ class FastIteMap<K, V> implements IFastIteMap<K, V> {
             return true;
         }
     }
-    get length(): number {
-        return this._values.length;
-    }
     get keys(): Map<K, number> {
         return this._keys;
+    }
+    get length(): number {
+        return this._values.length;
     }
     push(key: K, value: V): number {
         let e = this._keys.get(key)
@@ -104,9 +104,6 @@ class FastIteMap<K, V> implements IFastIteMap<K, V> {
     set(key: K, value: V): number {
         return this.push(key, value);
     }
-    sort(compare?){
-        this.values.sort(compare);
-    }
     get size(): number {
         return this._values.length;
     }
@@ -114,3 +111,5 @@ class FastIteMap<K, V> implements IFastIteMap<K, V> {
         return this._values;
     }
 }
+
+

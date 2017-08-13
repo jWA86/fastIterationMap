@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("mocha");
 var chai_1 = require("chai");
-var FastIteMap_1 = require("../src/FastIteMap");
+var FastIterationMap_1 = require("../src/FastIterationMap");
 describe("Custom HashMap", function () {
     var k, k2, k3, v, v2, v3;
     var ob = (function () {
@@ -10,7 +10,7 @@ describe("Custom HashMap", function () {
         }
         return ob;
     }());
-    var myMap = new FastIteMap_1.FastIteMap();
+    var myMap = new FastIterationMap_1.FastIterationMap();
     beforeEach(function () {
         k = "myKey1";
         v = { "prop1": 1, "prop2": "aString" };
@@ -18,7 +18,7 @@ describe("Custom HashMap", function () {
         v2 = { "prop1": 2, "prop2": "aString" };
         k3 = "myKey3";
         v3 = { "prop1": 3, "prop2": "aString" };
-        myMap = new FastIteMap_1.FastIteMap();
+        myMap = new FastIterationMap_1.FastIterationMap();
     });
     describe('collections', function () {
         it("keys() should return an object Map", function () {
@@ -198,6 +198,14 @@ describe("Custom HashMap", function () {
             chai_1.expect(myMap.get(k2)).to.equal(v2);
             chai_1.expect(myMap.get(k)).to.equal(v);
         });
+        it("insertAfter with the same key should return false", function () {
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            var r = myMap.insertAfter(k, v3, k);
+            chai_1.expect(r).to.equal(false);
+            chai_1.expect(myMap.get(k)).to.equal(v);
+            chai_1.expect(myMap.size).to.equal(2);
+        });
     });
     describe("insertBefore() ", function () {
         it("should insert the element in the values array before the element of reference", function () {
@@ -248,6 +256,14 @@ describe("Custom HashMap", function () {
             chai_1.expect(myMap.get(k3)).to.equal(v3);
             chai_1.expect(myMap.get(k2)).to.equal(v2);
             chai_1.expect(myMap.get(k)).to.equal(v);
+        });
+        it("insertBefore with the same key should return false", function () {
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            var r = myMap.insertAfter(k, v3, k);
+            chai_1.expect(r).to.equal(false);
+            chai_1.expect(myMap.get(k)).to.equal(v);
+            chai_1.expect(myMap.size).to.equal(2);
         });
     });
 });

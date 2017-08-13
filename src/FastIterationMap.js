@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var FastIteMap = (function () {
-    function FastIteMap() {
+var FastIterationMap = (function () {
+    function FastIterationMap() {
         this._keys = new Map();
         this._values = [];
     }
-    FastIteMap.prototype.clear = function () {
+    FastIterationMap.prototype.clear = function () {
         this._keys.clear();
         this._values = [];
     };
-    FastIteMap.prototype.delete = function (key) {
+    FastIterationMap.prototype.delete = function (key) {
         var i = this._keys.get(key);
         var r = this._keys.delete(key);
         this.offsetIndexInKeys(i, -1);
@@ -21,16 +21,16 @@ var FastIteMap = (function () {
             return false;
         }
     };
-    FastIteMap.prototype.get = function (key) {
+    FastIterationMap.prototype.get = function (key) {
         return this._values[this._keys.get(key)];
     };
-    FastIteMap.prototype.has = function (key) {
+    FastIterationMap.prototype.has = function (key) {
         return this._keys.has(key);
     };
-    FastIteMap.prototype.insertValue = function (key, value, index) {
+    FastIterationMap.prototype.insertValue = function (key, value, index) {
         return this._values.splice(index, 0, value);
     };
-    FastIteMap.prototype.offsetIndexInKeys = function (after, offsetVal) {
+    FastIterationMap.prototype.offsetIndexInKeys = function (after, offsetVal) {
         var mapIter = this._keys.entries();
         var l = this._keys.size;
         for (var i = 0; i < l; ++i) {
@@ -40,7 +40,10 @@ var FastIteMap = (function () {
             }
         }
     };
-    FastIteMap.prototype.insertAfter = function (key, value, keyRef) {
+    FastIterationMap.prototype.insertAfter = function (key, value, keyRef) {
+        if (this._keys.get(key) !== undefined) {
+            return false;
+        }
         var i = this._keys.get(keyRef);
         this.insertValue(key, value, i + 1);
         if (i === undefined) {
@@ -52,7 +55,10 @@ var FastIteMap = (function () {
             return true;
         }
     };
-    FastIteMap.prototype.insertBefore = function (key, value, keyRef) {
+    FastIterationMap.prototype.insertBefore = function (key, value, keyRef) {
+        if (this._keys.get(key) !== undefined) {
+            return false;
+        }
         var i = this._keys.get(keyRef);
         this.insertValue(key, value, i);
         if (i === undefined) {
@@ -64,21 +70,21 @@ var FastIteMap = (function () {
             return true;
         }
     };
-    Object.defineProperty(FastIteMap.prototype, "length", {
-        get: function () {
-            return this._values.length;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FastIteMap.prototype, "keys", {
+    Object.defineProperty(FastIterationMap.prototype, "keys", {
         get: function () {
             return this._keys;
         },
         enumerable: true,
         configurable: true
     });
-    FastIteMap.prototype.push = function (key, value) {
+    Object.defineProperty(FastIterationMap.prototype, "length", {
+        get: function () {
+            return this._values.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FastIterationMap.prototype.push = function (key, value) {
         var e = this._keys.get(key);
         if (e === undefined) {
             var l = this._values.push(value);
@@ -89,26 +95,23 @@ var FastIteMap = (function () {
         }
         return this._values.length;
     };
-    FastIteMap.prototype.set = function (key, value) {
+    FastIterationMap.prototype.set = function (key, value) {
         return this.push(key, value);
     };
-    FastIteMap.prototype.sort = function (compare) {
-        this.values.sort(compare);
-    };
-    Object.defineProperty(FastIteMap.prototype, "size", {
+    Object.defineProperty(FastIterationMap.prototype, "size", {
         get: function () {
             return this._values.length;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(FastIteMap.prototype, "values", {
+    Object.defineProperty(FastIterationMap.prototype, "values", {
         get: function () {
             return this._values;
         },
         enumerable: true,
         configurable: true
     });
-    return FastIteMap;
+    return FastIterationMap;
 }());
-exports.FastIteMap = FastIteMap;
+exports.FastIterationMap = FastIterationMap;

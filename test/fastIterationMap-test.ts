@@ -1,6 +1,6 @@
 import "mocha";
 import { expect } from "chai";
-import { FastIteMap } from "../src/FastIteMap";
+import { FastIterationMap } from "../src/FastIterationMap";
 
 describe("Custom HashMap", () => {
     let k, k2, k3, v, v2, v3;
@@ -8,7 +8,7 @@ describe("Custom HashMap", () => {
         prop1:number;
         prop2:string;
     }
-    let myMap = new FastIteMap<string, ob>();
+    let myMap = new FastIterationMap<string, ob>();
     beforeEach(() => {
         k = "myKey1";
         v = { "prop1": 1, "prop2": "aString" };
@@ -16,7 +16,7 @@ describe("Custom HashMap", () => {
         v2 = { "prop1": 2, "prop2": "aString" };
         k3 = "myKey3";
         v3 = { "prop1": 3, "prop2": "aString" };
-        myMap = new FastIteMap<string, ob>();
+        myMap = new FastIterationMap<string, ob>();
     });
  describe('collections',()=>{
         it("keys() should return an object Map", ()=>{
@@ -27,7 +27,6 @@ describe("Custom HashMap", () => {
             expect(myMap.values instanceof Array).to.equal(true);
         });
     });
-    
     describe("set(key, value)", () => {
         it('should be able to add an element to the values array', () => {
             //set 
@@ -102,7 +101,6 @@ describe("Custom HashMap", () => {
         });
     });
     describe("delete(key)", () => {
-        
         it("should return true if it deleted the element ", () => {
             myMap.set(k, v);
             let r = myMap.delete(k)
@@ -207,6 +205,14 @@ describe("Custom HashMap", () => {
             expect(myMap.get(k2)).to.equal(v2);
             expect(myMap.get(k)).to.equal(v);
         });
+        it("insertAfter with the same key should return false", ()=>{
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            let r = myMap.insertAfter(k, v3, k);
+            expect(r).to.equal(false);
+            expect(myMap.get(k)).to.equal(v);
+            expect(myMap.size).to.equal(2);
+        });
     });
     describe("insertBefore() ", () => {
         it("should insert the element in the values array before the element of reference", () => {
@@ -261,5 +267,13 @@ describe("Custom HashMap", () => {
             expect(myMap.get(k2)).to.equal(v2);
             expect(myMap.get(k)).to.equal(v);
         });  
+        it("insertBefore with the same key should return false", ()=>{
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            let r = myMap.insertAfter(k, v3, k);
+            expect(r).to.equal(false);
+            expect(myMap.get(k)).to.equal(v);
+            expect(myMap.size).to.equal(2);
+        });
     });
 }); 
