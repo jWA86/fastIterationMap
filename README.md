@@ -19,7 +19,7 @@ interface IFastIterationMap<K, V> {
 ```
 
 ```javascript
-    interface ISimpleObject {
+interface ISimpleObject {
     prop1:string;
     prop2:number;
 }
