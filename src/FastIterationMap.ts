@@ -49,12 +49,12 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
     protected insertValue(key: K, value: V, index: number): V[] {
         return this._values.splice(index, 0, value);
     }
-    protected offsetIndexInKeys(after: number, offsetVal: number): void {
+    protected offsetIndexInKeys(from: number, offsetVal: number, to?:number): void {
         var mapIter = this._keys.entries();
-        let l = this._keys.size;
+        let l = to || this._keys.size;
         for (let i = 0; i < l; ++i) {
             let e = mapIter.next().value;
-            if (e[1] > after) {
+            if (e[1] > from) {
                 this._keys.set(e[0], e[1] += offsetVal);
             }
         }
