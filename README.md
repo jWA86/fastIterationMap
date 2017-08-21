@@ -1,5 +1,8 @@
 # fastIterationMap
-A typescript implementation of a ES6 Map with Array like performance for iteration and O(1) for lookup.
+A typescript implementation of a ES6 Map with Array like performance for iteration and O(1) for lookup but O(2n for deletion).
+
+It uses an ES6 Map for storing keys and corresponding index of elements the array that is use for iteration.
+
 
 ```javascript
 interface IFastIterationMap<K, V> {
