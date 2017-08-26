@@ -8,10 +8,10 @@ interface IFastIterationMap<K, V> {
     insertBefore(key: K, value: V, keyRef: K): boolean;
     //provide for reading keys only, should not be modified outside the class
     keys: Map<K, number>
-    length: number;
+    readonly length: number;
     push(key: K, value: V);
     set(key: K, value: V);
-    size: number;
+    readonly size: number;
     values: V[];
 }
 
@@ -24,11 +24,11 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
         this._keys = new Map<K, number>();
         this._values = [];
     }
-    clear():void {
+    clear(): void {
         this._keys.clear();
         this._values = [];
     }
-    delete(key: K):boolean {
+    delete(key: K): boolean {
         let i = this._keys.get(key);
         let r = this._keys.delete(key);
         this.offsetIndexInKeys(i, -1);
@@ -51,7 +51,7 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
     }
     // from exclusive 
     // to exclusive
-    protected offsetIndexInKeys(from: number, offsetVal: number, to?:number): void {
+    protected offsetIndexInKeys(from: number, offsetVal: number, to?: number): void {
         var mapIter = this._keys.entries();
         let l = this._keys.size;
         to = to || Number.MAX_VALUE;
@@ -63,7 +63,7 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
         }
     }
     insertAfter(key: K, value: V, keyRef: K): boolean {
-        if(this._keys.get(key)!==undefined){return false;}
+        if (this._keys.get(key) !== undefined) { return false; }
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i + 1);
         if (i === undefined) {
@@ -75,7 +75,7 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
         }
     }
     insertBefore(key: K, value: V, keyRef: K): boolean {
-        if(this._keys.get(key)!==undefined){return false;}
+        if (this._keys.get(key) !== undefined) { return false; }
         let i = this._keys.get(keyRef);
         this.insertValue(key, value, i);
         if (i === undefined) {
