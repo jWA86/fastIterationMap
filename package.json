@@ -1,7 +1,8 @@
 {
   "name": "fastiterationmap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "an ES6 typescript Map that can be iterate like an Array",
+  "url":"https://github.com/jWA86/fastIterationMap",
   "main": "src/FastIterationMap.ts",
   "scripts": {
     "test": "mocha test/fastIterationMap-test.js"
@@ -23,5 +24,4 @@
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.5.5"
   }
-  
 }
