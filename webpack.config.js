@@ -7,7 +7,7 @@ module.exports = {
     watch: true,
     output: {
         path: path.resolve('./dist'),
-        filename: "fastIterationMap.min.js",
+        filename: "FastIterationMap.min.js",
         libraryTarget: 'umd'
     },
     plugins: [new UglifyJSPlugin({sourceMap:true}) 

@@ -4,7 +4,7 @@
   "description": "an ES6 typescript Map that can be iterate like an Array",
   "main": "src/FastIterationMap.ts",
   "scripts": {
-    "test": "mocha test\fastIterationMap-test.js"
+    "test": "mocha test/fastIterationMap-test.js"
   },
   "keywords": [
     "hashMap",
