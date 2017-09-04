@@ -4,6 +4,15 @@ A typescript implementation of a ES6 Map with Array like performance for iterati
 It uses an ES6 Map for storing keys and corresponding index of elements the array that is use for iteration.
 
 
+```shell
+    npm install fastiterationmap --save
+```
+
+use src/FastIterationMap.ts for typescript 
+or dist/fastIterationMap.min.js for browser distribution
+
+
+
 ```javascript
 interface IFastIterationMap<K, V> {
     clear();

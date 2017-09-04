@@ -1,6 +1,6 @@
 {
   "name": "fastiterationmap",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "an ES6 typescript Map that can be iterate like an Array",
   "main": "src/FastIterationMap.ts",
   "scripts": {
