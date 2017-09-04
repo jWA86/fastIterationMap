@@ -1,8 +1,7 @@
 {
   "name": "fastiterationmap",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "an ES6 typescript Map that can be iterate like an Array",
-  "url":"https://github.com/jWA86/fastIterationMap",
   "main": "src/FastIterationMap.ts",
   "scripts": {
     "test": "mocha test/fastIterationMap-test.js"
@@ -14,6 +13,10 @@
   ],
   "author": "jWA86",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jWA86/fastIterationMap"
+  },
   "devDependencies": {
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
