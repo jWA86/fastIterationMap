@@ -1,4 +1,6 @@
+
 export { FastIterationMap, IFastIterationMap }
+
 interface IFastIterationMap<K, V> {
     clear();
     delete(key: K): boolean;
@@ -114,5 +116,3 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
         return this._values;
     }
 }
-
-

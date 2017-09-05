@@ -3,13 +3,24 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 
 module.exports = {
-    entry: ["./src/fastIterationMap.js"],
-    watch: true,
+    entry: ["./src/FastIterationMap.ts"],
+    watch: false,
     output: {
         path: path.resolve('./dist'),
-        filename: "FastIterationMap.min.js",
+        filename: "index.js",
         libraryTarget: 'umd'
     },
-    plugins: [new UglifyJSPlugin({sourceMap:true}) 
-      ]
+    module: {
+        rules: [
+            {
+                test: /\.ts?$/,
+                loader: 'ts-loader'
+            }
+        ]
+    },
+    resolve: {
+        extensions: [ '.ts' ]
+    },
+    // plugins: [new UglifyJSPlugin({sourceMap:true}) 
+    //   ]
 };

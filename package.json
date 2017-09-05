@@ -2,9 +2,11 @@
   "name": "fastiterationmap",
   "version": "1.0.3",
   "description": "an ES6 typescript Map that can be iterate like an Array",
-  "main": "src/FastIterationMap.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/src/FastIterationMap.d.ts",
   "scripts": {
-    "test": "mocha test/fastIterationMap-test.js"
+    "test": "karma start",
+    "build": "webpack"
   },
   "keywords": [
     "hashMap",
@@ -18,12 +20,22 @@
     "url": "https://github.com/jWA86/fastIterationMap"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.2",
-    "@types/mocha": "^2.2.41",
-    "chai": "^4.1.1",
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.0.26",
+    "chai": "^4.1.2",
+    "es6-shim": "^0.35.3",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-typescript": "^3.0.5",
     "mocha": "^3.5.0",
-    "nyc": "^11.1.0",
-    "typescript": "^2.4.2",
+    "ts-loader": "^2.3.4",
+    "typescript": "^2.5.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.5.5"
   }

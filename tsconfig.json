@@ -2,18 +2,18 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "sourceMap": false,
-    "watch":true,
-    "moduleResolution": "node",
-    "isolatedModules": false,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "sourceMap": true,
+    "watch":true, 
+    "declaration":true,
     "lib": [
-      "es2015", "es2016", "es6", "es5"
+      "es5",
+      "es6",
+      "es2015",
+      "es2017"
     ]
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave": false
 }
