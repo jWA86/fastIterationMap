@@ -7,15 +7,20 @@ module.exports = function(config) {
             "node_modules/es6-shim/es6-shim.js"
         ],
         preprocessors: {
-            "src/**/*.ts": ["karma-typescript", "coverage"],
-            "test/**/*.ts": ["karma-typescript"]
-            
+          "src/**/*.ts": ["karma-typescript", "coverage"],
+          "test/**/*.ts": ["karma-typescript"]
         },
-        reporters: ["dots", "karma-typescript"],
-
+        reporters: ["progress", "karma-typescript", "coverage"],
+  
         browsers: ["Chrome", "Firefox", "IE", "PhantomJS"],
-
+        
+        coverageReporter: {
+          type : 'html',
+          dir : 'coverage/'
+        },
+        // usePolling: true,
         singleRun: false,
-        concurrency: Infinity
+        concurrency: Infinity,
+        autoWatch: true,
     });
-};
+  };
