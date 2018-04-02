@@ -13,6 +13,13 @@ module.exports = function(config) {
         reporters: ["progress", "karma-typescript", "coverage"],
   
         browsers: ["Chrome", "Firefox", "IE", "PhantomJS", "Safari"],
+
+        karmaTypescriptConfig: {
+          compilerOptions: {
+              module: "commonjs"
+          },
+          tsconfig: "./tsconfig.json",
+      },
         
         coverageReporter: {
           type : 'html',
