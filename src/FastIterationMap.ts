@@ -48,30 +48,58 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
     public has(key: K): boolean {
         return this._keys.has(key);
     }
-
+    /**
+     * Insert an item after another item
+     * @param key the key of the item to insert
+     * @param value the value of the item
+     * @param keyRef the key of the item to insert after
+     */
     public insertAfter(key: K, value: V, keyRef: K): boolean {
         if (this._keys.get(key) !== undefined) { return false; }
         const i = this._keys.get(keyRef);
-        this.insertValue(key, value, i + 1);
-        if (i === undefined) {
-            return false;
-        } else {
-            this.offsetIndexInKeys(i, 1);
-            this._keys.set(key, i + 1);
-            return true;
-        }
+        if (i === undefined) { return false; }
+        this.insertValue(i + 1, value);
+        this.offsetIndexInKeys(i, 1);
+        this._keys.set(key, i + 1);
+        return true;
     }
+    /**
+     * Insert 2 items around the another item
+     * @param keyRef the key of the item insert around
+     * @param firstK the key of the item to insert before
+     * @param firstV the value of the item to insert before
+     * @param secondK the key of the item to insert after
+     * @param secondV the value of the item to insert after
+     */
+    public insertAround(keyRef: K, firstK: K, firstV: V, secondK: K, secondV: V): boolean {
+        if (this._keys.get(firstK) !== undefined || this._keys.get(secondK) !== undefined) { return false; }
+        const i = this._keys.get(keyRef);
+        if (i === undefined) { return false; }
+        // insert the 2 items after the item of reference
+        // offset index by 2 in the keys map of all element after the index of reference
+        // in the keys map set index of the 2 new items
+        // finally swap the item of reference with the first of the 2 items inserted
+        this.insertValue(i + 1, firstV, secondV);
+        this.offsetIndexInKeys(i, 2);
+        this._keys.set(firstK, i + 1);
+        this._keys.set(secondK, i + 2);
+        return this.swap(keyRef, firstK);
+    }
+
+    /**
+     * Insert an item before another item
+     * @param key the key of the item to insert
+     * @param value the value of the item
+     * @param keyRef the key of the item to insert before
+     */
     public insertBefore(key: K, value: V, keyRef: K): boolean {
         if (this._keys.get(key) !== undefined) { return false; }
         const i = this._keys.get(keyRef);
-        this.insertValue(key, value, i);
-        if (i === undefined) {
-            return false;
-        } else {
-            this.offsetIndexInKeys(i - 1, 1);
-            this._keys.set(key, i);
-            return true;
-        }
+        if (i === undefined) { return false; }
+        this.insertValue(i, value);
+        this.offsetIndexInKeys(i - 1, 1);
+        this._keys.set(key, i);
+        return true;
     }
     get keys(): Map<K, number> {
         return this._keys;
@@ -100,6 +128,11 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
     public set(key: K, value: V): number {
         return this.push(key, value);
     }
+    /**
+     * Swap position of 2 items in the values array and set the correct index in the keys Map
+     * @param key1
+     * @param key2
+     */
     public swap(key1: K, key2: K): boolean {
         const index1 = this._keys.get(key1);
         const index2 = this._keys.get(key2);
@@ -111,11 +144,16 @@ class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
         this._keys.set(key2, index1);
         return true;
     }
-    protected insertValue(key: K, value: V, index: number): V[] {
-        return this._values.splice(index, 0, value);
+    protected insertValue(index: number, ...values: V[]): V[] {
+        return this._values.splice(index, 0, ...values);
     }
-    // from exclusive
-    // to exclusive
+
+    /**
+     * Offset indices in the keys Map from a position ([from] and [to] not included)
+     * @param from offset after this key
+     * @param offsetVal the amount to offset indices
+     * @param to if specidied offset until this key, otherwise offset to end of the collection
+     */
     protected offsetIndexInKeys(from: number, offsetVal: number, to?: number): void {
         const mapIter = this._keys.entries();
         const l = this._keys.size;

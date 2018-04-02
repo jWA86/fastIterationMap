@@ -6,9 +6,13 @@ describe("Custom HashMap", () => {
     let k;
     let k2;
     let k3;
-    let  v;
-    let  v2;
+    let k4;
+    let k5;
+    let v;
+    let v2;
     let v3;
+    let v4;
+    let v5;
     class Ob {
         public prop1: number;
         public prop2: string;
@@ -16,11 +20,15 @@ describe("Custom HashMap", () => {
     let myMap = new FastIterationMap<string, Ob>();
     beforeEach(() => {
         k = "myKey1";
-        v = { prop1: 1, prop2: "aString" };
+        v = { prop1: 1, prop2: "aString1" };
         k2 = "myKey2";
-        v2 = { prop1: 2, prop2: "aString" };
+        v2 = { prop1: 2, prop2: "aString2" };
         k3 = "myKey3";
-        v3 = { prop1: 3, prop2: "aString" };
+        v3 = { prop1: 3, prop2: "aString3" };
+        k4 = "myKey4";
+        v4 = { prop1: 4, prop2: "aString4" };
+        k5 = "myKey5";
+        v5 = { prop1: 5, prop2: "aString5" };
         myMap = new FastIterationMap<string, Ob>();
     });
     describe("collections", () => {
@@ -278,6 +286,73 @@ describe("Custom HashMap", () => {
             expect(r).to.equal(false);
             expect(myMap.get(k)).to.equal(v);
             expect(myMap.size).to.equal(2);
+        });
+    });
+    describe("insert 2 items around", () => {
+        it("InsertAround should insert an item before and one item after the item of reference ", () => {
+            // k, k2, k3
+            // to
+            // k, k4, k2, k5, k3
+
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            myMap.set(k3, v3);
+            const r = myMap.insertAround(k2, k4, v4, k5, v5);
+            expect(r).to.equal(true);
+            expect(myMap.size).to.equal(5);
+            expect(myMap.get(k)).to.equal(v);
+            expect(myMap.get(k2)).to.equal(v2);
+            expect(myMap.get(k3)).to.equal(v3);
+            expect(myMap.get(k4)).to.equal(v4);
+            expect(myMap.get(k5)).to.equal(v5);
+
+            expect(myMap.keys.get(k)).to.equal(0);
+            expect(myMap.keys.get(k4)).to.equal(1);
+            expect(myMap.keys.get(k2)).to.equal(2);
+            expect(myMap.keys.get(k5)).to.equal(3);
+            expect(myMap.keys.get(k3)).to.equal(4);
+
+        });
+        it("insert around the first element", () => {
+            // k, k2
+            // to
+            // k3, k, k4, k2
+
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            const r = myMap.insertAround(k, k3, v3, k4, v4);
+            expect(r).to.equal(true);
+            expect(myMap.size).to.equal(4);
+            expect(myMap.get(k)).to.equal(v);
+            expect(myMap.get(k2)).to.equal(v2);
+            expect(myMap.get(k3)).to.equal(v3);
+            expect(myMap.get(k4)).to.equal(v4);
+
+            expect(myMap.keys.get(k3)).to.equal(0);
+            expect(myMap.keys.get(k)).to.equal(1);
+            expect(myMap.keys.get(k4)).to.equal(2);
+            expect(myMap.keys.get(k2)).to.equal(3);
+
+        });
+        it("insert around the last element", () => {
+            // k, k2
+            // to
+            // k, k3, k2, k4
+
+            myMap.set(k, v);
+            myMap.set(k2, v2);
+            const r = myMap.insertAround(k2, k3, v3, k4, v4);
+            expect(r).to.equal(true);
+            expect(myMap.size).to.equal(4);
+            expect(myMap.get(k)).to.equal(v);
+            expect(myMap.get(k2)).to.equal(v2);
+            expect(myMap.get(k3)).to.equal(v3);
+            expect(myMap.get(k4)).to.equal(v4);
+
+            expect(myMap.keys.get(k)).to.equal(0);
+            expect(myMap.keys.get(k3)).to.equal(1);
+            expect(myMap.keys.get(k2)).to.equal(2);
+            expect(myMap.keys.get(k4)).to.equal(3);
         });
     });
     describe("swap", () => {
