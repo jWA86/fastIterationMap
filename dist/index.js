@@ -114,35 +114,69 @@ var FastIterationMap = /** @class */ (function () {
     FastIterationMap.prototype.has = function (key) {
         return this._keys.has(key);
     };
+    /**
+     * Insert an item after another item
+     * @param key the key of the item to insert
+     * @param value the value of the item
+     * @param keyRef the key of the item to insert after
+     */
     FastIterationMap.prototype.insertAfter = function (key, value, keyRef) {
         if (this._keys.get(key) !== undefined) {
             return false;
         }
         var i = this._keys.get(keyRef);
-        this.insertValue(key, value, i + 1);
         if (i === undefined) {
             return false;
         }
-        else {
-            this.offsetIndexInKeys(i, 1);
-            this._keys.set(key, i + 1);
-            return true;
-        }
+        this.insertValue(i + 1, value);
+        this.offsetIndexInKeys(i, 1);
+        this._keys.set(key, i + 1);
+        return true;
     };
+    /**
+     * Insert 2 items around the another item
+     * @param keyRef the key of the item insert around
+     * @param firstK the key of the item to insert before
+     * @param firstV the value of the item to insert before
+     * @param secondK the key of the item to insert after
+     * @param secondV the value of the item to insert after
+     */
+    FastIterationMap.prototype.insertAround = function (keyRef, firstK, firstV, secondK, secondV) {
+        if (this._keys.get(firstK) !== undefined || this._keys.get(secondK) !== undefined) {
+            return false;
+        }
+        var i = this._keys.get(keyRef);
+        if (i === undefined) {
+            return false;
+        }
+        // insert the 2 items after the item of reference
+        // offset index by 2 in the keys map of all element after the index of reference
+        // in the keys map set index of the 2 new items
+        // finally swap the item of reference with the first of the 2 items inserted
+        this.insertValue(i + 1, firstV, secondV);
+        this.offsetIndexInKeys(i, 2);
+        this._keys.set(firstK, i + 1);
+        this._keys.set(secondK, i + 2);
+        return this.swap(keyRef, firstK);
+    };
+    /**
+     * Insert an item before another item
+     * @param key the key of the item to insert
+     * @param value the value of the item
+     * @param keyRef the key of the item to insert before
+     */
     FastIterationMap.prototype.insertBefore = function (key, value, keyRef) {
         if (this._keys.get(key) !== undefined) {
             return false;
         }
         var i = this._keys.get(keyRef);
-        this.insertValue(key, value, i);
         if (i === undefined) {
             return false;
         }
-        else {
-            this.offsetIndexInKeys(i - 1, 1);
-            this._keys.set(key, i);
-            return true;
-        }
+        this.insertValue(i, value);
+        this.offsetIndexInKeys(i - 1, 1);
+        this._keys.set(key, i);
+        return true;
     };
     Object.defineProperty(FastIterationMap.prototype, "keys", {
         get: function () {
@@ -188,6 +222,11 @@ var FastIterationMap = /** @class */ (function () {
     FastIterationMap.prototype.set = function (key, value) {
         return this.push(key, value);
     };
+    /**
+     * Swap position of 2 items in the values array and set the correct index in the keys Map
+     * @param key1
+     * @param key2
+     */
     FastIterationMap.prototype.swap = function (key1, key2) {
         var index1 = this._keys.get(key1);
         var index2 = this._keys.get(key2);
@@ -201,11 +240,20 @@ var FastIterationMap = /** @class */ (function () {
         this._keys.set(key2, index1);
         return true;
     };
-    FastIterationMap.prototype.insertValue = function (key, value, index) {
-        return this._values.splice(index, 0, value);
+    FastIterationMap.prototype.insertValue = function (index) {
+        var values = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            values[_i - 1] = arguments[_i];
+        }
+        return (_a = this._values).splice.apply(_a, [index, 0].concat(values));
+        var _a;
     };
-    // from exclusive
-    // to exclusive
+    /**
+     * Offset indices in the keys Map from a position ([from] and [to] not included)
+     * @param from offset after this key
+     * @param offsetVal the amount to offset indices
+     * @param to if specidied offset until this key, otherwise offset to end of the collection
+     */
     FastIterationMap.prototype.offsetIndexInKeys = function (from, offsetVal, to) {
         var mapIter = this._keys.entries();
         var l = this._keys.size;
