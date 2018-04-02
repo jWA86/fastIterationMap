@@ -20,6 +20,7 @@ interface IFastIterationMap<K, V> {
     get(key: K): V
     has(key: K): boolean;
     insertAfter(key: K, value: V, keyRef: K): boolean;
+    insertAround(keyRef: K, firstK: K, firstV: V, secondK: K, secondV: V): boolean;
     insertBefore(key: K, value: V, keyRef: K): boolean;
     keys: Map<K, number>
     length: number;
