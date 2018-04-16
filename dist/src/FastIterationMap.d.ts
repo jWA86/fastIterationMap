@@ -21,6 +21,11 @@ declare class FastIterationMap<K, V> implements IFastIterationMap<K, V> {
     clear(): void;
     delete(key: K): boolean;
     get(key: K): V;
+    /**
+     * Return the index of an element in the value array
+     * @param key
+     */
+    getIndex(key: K): number;
     has(key: K): boolean;
     /**
      * Insert an item after another item

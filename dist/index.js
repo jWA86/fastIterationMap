@@ -111,6 +111,13 @@ var FastIterationMap = /** @class */ (function () {
     FastIterationMap.prototype.get = function (key) {
         return this._values[this._keys.get(key)];
     };
+    /**
+     * Return the index of an element in the value array
+     * @param key
+     */
+    FastIterationMap.prototype.getIndex = function (key) {
+        return this._keys.get(key);
+    };
     FastIterationMap.prototype.has = function (key) {
         return this._keys.has(key);
     };
@@ -145,18 +152,18 @@ var FastIterationMap = /** @class */ (function () {
         if (this._keys.get(firstK) !== undefined || this._keys.get(secondK) !== undefined) {
             return false;
         }
-        var i = this._keys.get(keyRef);
-        if (i === undefined) {
+        var index = this._keys.get(keyRef);
+        if (index === undefined) {
             return false;
         }
         // insert the 2 items after the item of reference
         // offset index by 2 in the keys map of all element after the index of reference
         // in the keys map set index of the 2 new items
         // finally swap the item of reference with the first of the 2 items inserted
-        this.insertValue(i + 1, firstV, secondV);
-        this.offsetIndexInKeys(i, 2);
-        this._keys.set(firstK, i + 1);
-        this._keys.set(secondK, i + 2);
+        this.insertValue(index + 1, firstV, secondV);
+        this.offsetIndexInKeys(index, 2);
+        this._keys.set(firstK, index + 1);
+        this._keys.set(secondK, index + 2);
         return this.swap(keyRef, firstK);
     };
     /**

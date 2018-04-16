@@ -103,13 +103,18 @@ describe("Custom HashMap", () => {
             expect(myMap.get(k)).to.equal(v2);
         });
     });
-    describe("get(key)", () => {
+    describe("get", () => {
         it("should be able to return the element with the corresponding key", () => {
             myMap.set(k, v);
             expect(myMap.get(k)).to.equal(v);
         });
         it("should return undefined if not found", () => {
             expect(myMap.get("keyNotP")).to.equal(undefined);
+        });
+        it("getIndex(key) return the index of the element", () => {
+            myMap.set(k, v);
+            const index = myMap.getIndex(k);
+            expect(myMap.values[index]).to.equal(v);
         });
     });
     describe("delete(key)", () => {
